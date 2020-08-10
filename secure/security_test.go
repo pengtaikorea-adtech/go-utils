@@ -15,8 +15,8 @@ var sha256Map = map[string]string{
 
 func TestSha256(t *testing.T) {
 	for o, h := range sha256Map {
-		if h != Enhash(o) {
-			t.Errorf("sha256 unmatched %s: expected %s but %s", o, h, Enhash(o))
+		if h != Sha256(o) {
+			t.Errorf("sha256 unmatched %s: expected %s but %s", o, h, Sha256(o))
 		}
 	}
 }
@@ -59,13 +59,13 @@ func TestEncryption(t *testing.T) {
 	ciphers := make([]string, len(origins))
 
 	for i, org := range origins {
-		ciphers[i] = Encrypt(key, org)
+		ciphers[i] = AESEncrypt(key, org)
 		t.Logf(" - %s >> %s", org, ciphers[i])
 	}
 
 	// Right key decrypt
 	for i, cy := range ciphers {
-		if dec := Decrypt(key, cy); origins[i] != dec {
+		if dec := AESDecrypt(key, cy); origins[i] != dec {
 			t.Errorf("decrypt not matched %d: expect %s but %s", i, origins[i], dec)
 		}
 	}
@@ -73,7 +73,7 @@ func TestEncryption(t *testing.T) {
 	wkey := GenerateKey()
 	// Wrong key decrypt
 	for i, cy := range ciphers {
-		if dec := Decrypt(wkey, cy); origins[i] == dec {
+		if dec := AESDecrypt(wkey, cy); origins[i] == dec {
 			t.Errorf("Expected wrong but hacked: %s (basekey %s, but %s)", origins[i], key, wkey)
 		}
 	}
