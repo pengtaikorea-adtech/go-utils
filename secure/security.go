@@ -21,7 +21,7 @@ func GenerateKey() string {
 	} else {
 		salt = uuid.Nil.String()
 	}
-	return Enhash(salt)
+	return Sha256(salt)
 }
 
 // Sha256 - convert sha256 hash string
