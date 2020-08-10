@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/base64"
 	"encoding/hex"
 	"io"
@@ -22,6 +23,20 @@ func GenerateKey() string {
 		salt = uuid.Nil.String()
 	}
 	return Sha256(salt)
+}
+
+// GenerateRandom512 returns sha512 hashed random string
+func GenerateRandom512() string {
+	nonce := make([]byte, 512)
+	io.ReadFull(rand.Reader, nonce)
+	return Sha512(string(nonce))
+}
+
+// Sha512 - convert sha512 hash string
+func Sha512(token string) string {
+	bytes := []byte(token)
+	hashed := sha512.Sum512(bytes)
+	return hex.EncodeToString(hashed[:])
 }
 
 // Sha256 - convert sha256 hash string

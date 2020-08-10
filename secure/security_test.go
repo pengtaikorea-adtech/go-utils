@@ -1,7 +1,6 @@
 package secure
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
@@ -21,13 +20,39 @@ func TestSha256(t *testing.T) {
 	}
 }
 
+func TestSha512(t *testing.T) {
+	for o := range sha256Map {
+		t.Logf("%s => %s", o, Sha512(o))
+	}
+}
+
+func TestGenerateToken(t *testing.T) {
+	testSize := 100000
+	stack := make([]string, testSize)
+
+	for i := 0; i < testSize; i++ {
+		stack[i] = GenerateRandom512()
+	}
+
+	for i := 0; i < testSize; i++ {
+		for j := 0; j < testSize; j++ {
+			if i == j {
+				continue
+			}
+			if stack[i] == stack[j] {
+				t.Errorf("unexpected match %d %d", i, j)
+			}
+		}
+	}
+}
+
 func TestKeygen(t *testing.T) {
-	testSize := 100
+	testSize := 100000
 	stack := make([]string, testSize)
 
 	for i := 0; i < testSize; i++ {
 		stack[i] = GenerateKey()
-		fmt.Println("- " + stack[i])
+		// fmt.Println("- " + stack[i])
 		time.Sleep(10 * time.Millisecond)
 	}
 
