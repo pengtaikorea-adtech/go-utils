@@ -1,4 +1,4 @@
-package gin
+package gins
 
 import (
 	"time"
@@ -35,4 +35,5 @@ func LoadRedisEntity(tx redis.Cmdable, hashkey string) (map[string]string, error
 // SaveRedisEntityIndex - ZADD
 func SaveRedisEntityIndex(tx redis.Cmdable, hashkey string, primaryKey ...string) error {
 	timestamp := float64(time.Now().Unix())
+	indices := make([]*redis.Z, len(primaryKey))
 }

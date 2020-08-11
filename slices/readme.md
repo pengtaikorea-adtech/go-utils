@@ -68,7 +68,7 @@ targetSlice, slices.ElemTypeString)
 
 ### Filter
 
->! NOT IMPLEMENTED YET
+filter slice
 
 ```go
 import "github.com/pengtaikorea-adtech/go-utils/slices"
