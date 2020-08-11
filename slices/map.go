@@ -5,7 +5,7 @@ import (
 )
 
 // MapFunc for map.
-type MapFunc func(entity interface{}, index int, slice interface{}) (interface{}, error)
+type MapFunc func(entity reflect.Value, index int, slice interface{}) (interface{}, error)
 
 // Map slice; slice to another slice that of slice => []outElementType;
 // length preserved

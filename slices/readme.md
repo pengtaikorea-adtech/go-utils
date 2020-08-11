@@ -40,7 +40,7 @@ import "github.com/pengtaikorea-adtech/go-utils/slices"
 var targetSlice []interface{}
 
 var strSlice, err := slices.Each(
-	func(e slices.Any, i int, s slices.ASlice) error {
+	func(e reflect.Value, i int, s interface{}) error {
 		// doSomethingOn(e)
 
 		// return nil error
@@ -62,7 +62,7 @@ import (
 )
 
 err := slices.Map(
-	func(e slices.Any, i int, s slices.ASlice) (slices.Any, error) {
+	func(e reflect.Value, i int, s interface{}) (interface{}, error) {
 		// build map value
 		if s, ok := e.(string); ok {
 			return s, nil
@@ -74,15 +74,15 @@ err := slices.Map(
 targetSlice, slices.ElemTypeString) 
 ```
 
-### Filter
+### ~~Filter~~
 
-filter slice.
+>! NOT IMPLEMENTED YET
 
 ```go
 import "github.com/pengtaikorea-adtech/go-utils/slices"
 
 filtered, err := slices.Filter(
-	func(e slices.Any, i int, s slices.ASlice) bool {
+	func(e reflect.Value, i int, s interface{}) bool {
 		// filter function true/false here
 		return true
 	},
@@ -90,3 +90,16 @@ targetSlice)
 ```
 
 ### Reduce
+
+reduce elements
+
+```go
+import "github.com/pengtaikorea-adtech/go-utils/slices"
+
+reduced, err := slices.Reduce(
+	func(t reflect.Value, e reflect.Value, i int, s interface{}) (interface{}, error) {
+		// DO some things with t
+		return t, nil
+	},
+targetSlice, initValue)
+)

@@ -1,20 +1,22 @@
 package slices
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestFilter(t *testing.T) {
 	// test sample
-	sample := make([]int, 100)
+	sample := make([]int, 20)
 	for i := range sample {
 		sample[i] = i
 	}
 
 	// take odds
-	rets, err := Filter(func(e interface{}, i int, s interface{}) bool {
-		v := e.(int)
+	odds, err := Filter(func(e reflect.Value, i int, s interface{}) bool {
+		v := e.Int()
 		return 0 < v%2
 	}, sample)
-	odds, _ := rets.([]int)
 	if err != nil {
 		t.Error(err)
 	}

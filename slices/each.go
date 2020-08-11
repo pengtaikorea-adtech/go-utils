@@ -3,7 +3,7 @@ package slices
 import "reflect"
 
 // EachFunc param on ForEach
-type EachFunc func(entity interface{}, index int, slice interface{}) error
+type EachFunc func(entity reflect.Value, index int, slice interface{}) error
 
 // Each slice; run ForEach
 func Each(handle EachFunc, slice interface{}) error {
