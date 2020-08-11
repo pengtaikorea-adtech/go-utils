@@ -2,7 +2,6 @@ package slices
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 )
 
@@ -15,7 +14,7 @@ func TestEach(t *testing.T) {
 		"rules",
 	}
 
-	Each(func(e reflect.Value, i int, s interface{}) error {
+	Each(func(e interface{}, i int, s interface{}) error {
 		fmt.Println(e)
 		return nil
 	}, sample)

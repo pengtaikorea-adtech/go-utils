@@ -1,7 +1,6 @@
 package slices
 
 import (
-	"reflect"
 	"testing"
 )
 
@@ -11,13 +10,15 @@ func TestReduce(t *testing.T) {
 		sample[i] = i + 1
 	}
 
-	total, err := Reduce(func(t reflect.Value, e reflect.Value, i int, s interface{}) (interface{}, error) {
+	total, err := Reduce(func(t interface{}, e interface{}, i int, s interface{}) (interface{}, error) {
 		// initValue and the return type should be matched
-		return int(t.Int() + e.Int()), nil
+		subTotal := t.(int)
+		entity := e.(int)
+		return subTotal + entity, nil
 	}, sample, 0)
 	if err != nil {
 		t.Error(err)
-	} else if total.Int() != 5050 {
+	} else if total.(int) != 5050 {
 		t.Error("total not exact")
 	}
 }

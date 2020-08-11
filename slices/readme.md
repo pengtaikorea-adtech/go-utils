@@ -10,20 +10,12 @@ $ go get "github.com/pengtaikorea-adtech/go-utils/slices"
 
 ## Types/Constants
 
-- **Any** represents "any" element type. 
-  ```go
-  type Any interface{}
-  ```
-- **ASlice** represents "any|anonymous|a-|a " slices.
-  ```go
-  type ASlice interface{}
-  ```
-- **ElemType...** Slice Element Type const. to be used for "Map". 
+- **ElementType...** Slice Element Type const. to be used for "Map". 
 type reflect.Type
 
-  - ElemTypeInt
-  - ElemTypeBool
-  - ElemTypeString
+  - ElementTypeInt
+  - ElementTypeBool
+  - ElementTypeString
   
 
 ## Snippet
@@ -40,7 +32,7 @@ import "github.com/pengtaikorea-adtech/go-utils/slices"
 var targetSlice []interface{}
 
 var strSlice, err := slices.Each(
-	func(e reflect.Value, i int, s interface{}) error {
+	func(e interface{}, i int, s interface{}) error {
 		// doSomethingOn(e)
 
 		// return nil error
@@ -62,7 +54,7 @@ import (
 )
 
 err := slices.Map(
-	func(e reflect.Value, i int, s interface{}) (interface{}, error) {
+	func(e interface{}, i int, s interface{}) (interface{}, error) {
 		// build map value
 		if s, ok := e.(string); ok {
 			return s, nil
@@ -74,7 +66,7 @@ err := slices.Map(
 targetSlice, slices.ElemTypeString) 
 ```
 
-### ~~Filter~~
+### Filter
 
 >! NOT IMPLEMENTED YET
 
@@ -82,7 +74,7 @@ targetSlice, slices.ElemTypeString)
 import "github.com/pengtaikorea-adtech/go-utils/slices"
 
 filtered, err := slices.Filter(
-	func(e reflect.Value, i int, s interface{}) bool {
+	func(e interface{}, i int, s interface{}) bool {
 		// filter function true/false here
 		return true
 	},
@@ -97,8 +89,8 @@ reduce elements
 import "github.com/pengtaikorea-adtech/go-utils/slices"
 
 reduced, err := slices.Reduce(
-	func(t reflect.Value, e reflect.Value, i int, s interface{}) (interface{}, error) {
-		// DO some things with t
+	func(t interface{}, e interface{}, i int, s interface{}) (interface{}, error) {
+		// Do somethings with t
 		return t, nil
 	},
 targetSlice, initValue)

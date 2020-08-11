@@ -3,7 +3,7 @@ package slices
 import "reflect"
 
 // EachFunc param on ForEach
-type EachFunc func(entity reflect.Value, index int, slice interface{}) error
+type EachFunc func(entity interface{}, index int, slice interface{}) error
 
 // Each slice; run ForEach
 func Each(handle EachFunc, slice interface{}) error {
@@ -11,7 +11,7 @@ func Each(handle EachFunc, slice interface{}) error {
 		sliceValues := reflect.ValueOf(slice)
 		sliceLength := sliceValues.Len()
 		for i := 0; i < sliceLength; i++ {
-			if err := handle(sliceValues.Index(i), i, slice); err != nil {
+			if err := handle(sliceValues.Index(i).Interface(), i, slice); err != nil {
 				return err
 			}
 		}

@@ -5,7 +5,7 @@ import (
 )
 
 // MapFunc for map.
-type MapFunc func(entity reflect.Value, index int, slice interface{}) (interface{}, error)
+type MapFunc func(entity interface{}, index int, slice interface{}) (interface{}, error)
 
 // Map slice; slice to another slice that of slice => []outElementType;
 // length preserved
@@ -22,13 +22,13 @@ func Map(handle MapFunc, slice interface{}, outElementType reflect.Type) (interf
 			if val, err := handle(sliceValues.Index(i), i, slice); err == nil {
 				rets.Index(i).Set(reflect.ValueOf(val))
 			} else {
-				return rets, err
+				return rets.Interface(), err
 			}
 		}
 	} else {
-		return rets, ErrSliceType
+		return rets.Interface(), ErrSliceType
 	}
 
-	return rets, nil
+	return rets.Interface(), nil
 
 }

@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"fmt"
 	"io"
-	"reflect"
 	"testing"
 )
 
@@ -17,8 +16,8 @@ func TestSliceMap(t *testing.T) {
 		sample[i] = int(b)
 	}
 
-	puts, err := Map(func(entity reflect.Value, index int, slice interface{}) (interface{}, error) {
-		return fmt.Sprintf("%d", entity.Int()), nil
+	puts, err := Map(func(entity interface{}, index int, slice interface{}) (interface{}, error) {
+		return fmt.Sprintf("%d", entity), nil
 	}, sample, ElementTypeString)
 
 	if err == nil {

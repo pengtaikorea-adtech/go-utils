@@ -1,7 +1,6 @@
 package slices
 
 import (
-	"reflect"
 	"testing"
 )
 
@@ -13,14 +12,23 @@ func TestFilter(t *testing.T) {
 	}
 
 	// take odds
-	odds, err := Filter(func(e reflect.Value, i int, s interface{}) bool {
-		v := e.Int()
-		return 0 < v%2
+	ret, err := Filter(func(e interface{}, i int, s interface{}) bool {
+		if v, ok := e.(int); ok {
+			return 0 < v%2
+		}
+		return false
 	}, sample)
+
 	if err != nil {
 		t.Error(err)
 	}
 
-	t.Error(len(sample) >= len(odds))
-	t.Log(odds)
+	// type conversion please
+	if odds, ok := ret.([]int); !ok {
+		t.Error("type assertion failed")
+	} else if len(sample) <= len(odds) {
+		t.Error("filtered length matched?")
+	} else {
+		t.Log(odds)
+	}
 }
