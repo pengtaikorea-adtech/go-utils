@@ -1,6 +1,7 @@
 package slices
 
 import (
+	"errors"
 	"reflect"
 )
 
@@ -51,6 +52,8 @@ var ElementTypeComplex128 = reflect.TypeOf(complex128(0))
 
 // ElementTypeString - outElementType complex
 var ElementTypeString = reflect.TypeOf("")
+
+var ErrSliceType = errors.New("is not a slice type")
 
 // IsSlice - test if the value is slice
 func IsSlice(target interface{}) bool {
