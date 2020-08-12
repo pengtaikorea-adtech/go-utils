@@ -1,6 +1,9 @@
 package gins
 
 import (
+	"errors"
+	"reflect"
+
 	"github.com/gin-gonic/gin"
 	"github.com/pengtaikorea-adtech/go-utils/slices"
 )
@@ -23,13 +26,15 @@ type RouteGroup struct {
 // RegisterGroup register group on the router
 func RegisterGroup(router gin.IRouter, group RouteGroup) {
 	// tail-recursion traverse starts,
-	stack := []hierarchicalRegisterEntry{router, group}
+	stack := []hierarchicalRegisterEntry{
+		{router, group},
+	}
 
 	for 0 < len(stack) {
 		// pop first (BFS)
 		rs, stack := stack[0], stack[1:]
 		// this router group
-		grp := rs.Group(rs.grp.Path)
+		grp := rs.rt.Group(rs.grp.Path)
 		// register middlewares
 		grp.Use(rs.grp.Middles...)
 		// register route entities
@@ -44,11 +49,13 @@ func RegisterGroup(router gin.IRouter, group RouteGroup) {
 			if sg, ok := e.(RouteGroup); ok {
 				return hierarchicalRegisterEntry{
 					grp,
-					sg
-				}
+					sg,
+				}, nil
 			}
-		}, rs.grp.SubGroups)
-		stack = append(stack, subs...)
+			return nil, errors.New("no result")
+		}, rs.grp.SubGroups, reflect.TypeOf(hierarchicalRegisterEntry{}))
+		subgroups := subs.([]hierarchicalRegisterEntry)
+		stack = append(stack, subgroups...)
 	}
 
 }
