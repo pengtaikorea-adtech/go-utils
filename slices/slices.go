@@ -53,6 +53,7 @@ var ElementTypeComplex128 = reflect.TypeOf(complex128(0))
 // ElementTypeString - outElementType complex
 var ElementTypeString = reflect.TypeOf("")
 
+// ErrSliceType - is not a slice type
 var ErrSliceType = errors.New("is not a slice type")
 
 // IsSlice - test if the value is slice

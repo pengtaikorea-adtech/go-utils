@@ -40,7 +40,7 @@ func RegisterGroup(router gin.IRouter, group RouteGroup) {
 		// register route entities
 		slices.Each(func(e interface{}, i int, es interface{}) error {
 			if rt, ok := e.(RouteEntity); ok {
-				grp.Handle(rt.Method, rt.Path, rt.Handler)
+				grp.Handle(rt.Method, rt.Path, HandlerWrap(rt.Handler))
 			}
 			return nil
 		}, rs.grp.Entities)

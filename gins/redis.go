@@ -12,18 +12,6 @@ import (
 
 var redisClient *redis.Client
 
-// ConfigureRedis - load redis configure
-func ConfigureRedis(path string) *redis.Options {
-	// default configure
-	option := redis.Options{
-		Addr: "6379",
-	}
-
-	// TODO: load from the path
-
-	return &option
-}
-
 const redisContextClientKey = ".redis.ctx"
 
 // ConnectRedis basic connecting function with redis
