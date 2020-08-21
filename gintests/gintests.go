@@ -2,6 +2,7 @@ package gintests
 
 import (
 	"fmt"
+	"io"
 	"testing"
 
 	"net/http"
@@ -17,6 +18,16 @@ type HTTPTesterFunc func(t *testing.T, rec *httptest.ResponseRecorder, req *http
 type Assume struct {
 	Request *http.Request
 	Expects []HTTPTesterFunc
+}
+
+// AssertCase generates an assertion case
+func AssertCase(method string, path string, body interface{}, expects ...HTTPTesterFunc) Assume {
+	params := body.(io.Reader)
+	req, _ := http.NewRequest(method, path, params)
+	return Assume{
+		Request: req,
+		Expects: expects,
+	}
 }
 
 // TestRequest - send request then run asserts
@@ -38,6 +49,9 @@ var ExpectStatusOK = ExpectStatusIs(http.StatusOK)
 
 // ExpectStatusExists - http.status != 404
 var ExpectStatusExists = ExpectStatusNot(http.StatusNotFound)
+
+// ExpectStatusNotExists - http.status == 404
+var ExpectStatusNotExists = ExpectStatusIs(http.StatusNotFound)
 
 const logFormat = "[gin-test] [%s] %s\n\t>>%s"
 
@@ -70,7 +84,8 @@ func ExpectStatusNot(statusCode int) HTTPTesterFunc {
 // Put "" as val, when to test existance only
 func ExpectHeader(key string, val string) HTTPTesterFunc {
 	return func(t *testing.T, rec *httptest.ResponseRecorder, req *http.Request) {
-		if v, ok := rec.Header()[key]; ok {
+		v := rec.Header().Get(key)
+		if v != "" {
 			if 0 < len(val) && val != v {
 				ef(t, req, fmt.Sprintf("Expecting Header[%s]=%s but %s", key, val, v))
 			}
@@ -82,7 +97,7 @@ func ExpectHeader(key string, val string) HTTPTesterFunc {
 
 // ExpectResponse - expecting response has cookie
 // Put "" as val, when to test existance only.
-func ExpectResponse(tester func(ts, rune)) HTTPTesterFunc {
+func ExpectResponse(tester func(*testing.T, rune)) HTTPTesterFunc {
 	return func(t *testing.T, rec *httptest.ResponseRecorder, req *http.Request) {
 		if payload, _, err := rec.Body.ReadRune(); err == nil {
 			tester(t, payload)
